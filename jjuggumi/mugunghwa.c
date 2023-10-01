@@ -3,6 +3,117 @@
 #include "keyin.h"
 #include <stdio.h>
 
-void mugunghwa(void) {
+#define DIR_UP		2
+#define DIR_DOWN	3
+#define DIR_LEFT	1
+#define DIR_RIGHT	0
 
+void mugunghwa_init(void);
+void move_manual(key_t key);
+void move_random(int i);
+void move_tail(int i, int nx, int ny);
+
+int px[PLAYER_MAX], py[PLAYER_MAX], period[PLAYER_MAX];
+
+void mugunghwa_init(void) {
+	map_init(9, 35);
+	for (int i = 0; i < n_player; i++) {
+		px[i] = N_COL - 2;
+		py[i] = 2+i;
+
+		period[i] = randint(200, 500);
+
+		back_buf[py[i]][px[i]] = '0' + i;
+	}
+	tick = 10;
+}
+
+void move_manual(key_t key) {
+	// 각 방향으로 움직일 때 x, y값 delta
+	static int dx[4] = { 1, -1, 0, 0 };
+	static int dy[4] = { 0, 0, -1, 1 };
+
+	int dir;  // 움직일 방향(0~3)
+	switch (key) {
+	case K_UP: dir = DIR_UP; break;
+	case K_DOWN: dir = DIR_DOWN; break;
+	case K_LEFT: dir = DIR_LEFT; break;
+	case K_RIGHT: dir = DIR_RIGHT; break;
+	default: return;
+	}
+
+	// 움직여서 놓일 자리
+	int nx, ny;
+	nx = px[0] + dx[dir];
+	ny = py[0] + dy[dir];
+	if (!placable(nx, ny)) {
+		return;
+	}
+
+	move_tail(0, nx, ny);
+}
+
+
+
+void move_random(int player) {
+	int p = player;
+	int nx, ny;
+	
+
+	do {
+		int rnd_num = randint(1, 1000);
+		if (rnd_num >= 1 && rnd_num <= 700) {
+			nx = px[p] - 1;
+			ny = py[p];
+		}
+		else if (rnd_num >= 701 && rnd_num <= 800) {
+			nx = px[p];
+			ny = py[p] - 1;
+		}
+		else if (rnd_num >= 801 && rnd_num <= 900) {
+			nx = px[p];
+			ny = py[p] + 1;
+		}
+		else {
+			nx = px[p];
+			ny = py[p];
+		}
+	} while (!placable(nx, ny));
+
+	move_tail(p, nx, ny);
+}
+
+void move_tail(int player, int nx, int ny) {
+	int p = player;  // 이름이 길어서...
+	back_buf[ny][nx] = back_buf[py[p]][px[p]];
+	back_buf[py[p]][px[p]] = ' ';
+	px[p] = nx;
+	py[p] = ny;
+}
+
+void mugunghwa(void) {
+	mugunghwa_init();
+	display();
+	while (1) {
+		// player 0만 손으로 움직임(4방향)
+		key_t key = get_key();
+		if (key == K_QUIT) {
+			break;
+		}
+		else if (key != K_UNDEFINED) {
+			move_manual(key);
+		}
+		
+		// player 1 부터는 랜덤으로 움직임(8방향)
+		for (int i = 1; i < n_player; i++) {
+			if (tick % period[i] == 0) {
+				move_random(i);
+			}
+		}
+		
+		display();
+		Sleep(10);
+		tick += 10;
+	}
+	display();
 }

@@ -30,7 +30,7 @@ int jjuggumi_init(void) {
 
 int main(void) {
 	jjuggumi_init();
-	sample();
+	//sample();
 	mugunghwa();
 	//jebi();
 	return 0;
