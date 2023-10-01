@@ -10,14 +10,14 @@ void draw(void);
 void print_status(void);
 
 // (zero-base) row행, col열로 커서 이동
-void gotoxy(int row, int col) {
+void gotoxy(int col, int row) {
 	COORD pos = { col,row };
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
 }
 
 // row행, col열에 ch 출력
-void printxy(char ch, int row, int col) {
-	gotoxy(row, col);
+void printxy(char ch, int col, int row) {
+	gotoxy(col, row);
 	printf("%c", ch);
 }
 
@@ -54,7 +54,7 @@ bool placable(int row, int col) {
 // 상단에 맵을, 하단에는 현재 상태를 출력
 void display(void) {
 	draw();
-	gotoxy(N_ROW + 4, 0);  // 추가로 표시할 정보가 있으면 맵과 상태창 사이의 빈 공간에 출력
+	gotoxy(0,N_ROW + 4);  // 추가로 표시할 정보가 있으면 맵과 상태창 사이의 빈 공간에 출력
 	print_status();
 }
 
@@ -63,7 +63,7 @@ void draw(void) {
 		for (int col = 0; col < N_COL; col++) {
 			if (front_buf[row][col] != back_buf[row][col]) {
 				front_buf[row][col] = back_buf[row][col];
-				printxy(front_buf[row][col], row, col);
+				printxy(front_buf[row][col], col, row);
 			}
 		}
 	}
