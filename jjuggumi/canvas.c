@@ -42,7 +42,7 @@ void map_init(int n_row, int n_col) {
 }
 
 // back_buf[row][col]이 이동할 수 있는 자리인지 확인하는 함수
-bool placable(int row, int col) {
+bool placable(int col, int row) {
 	if (row < 0 || row >= N_ROW ||
 		col < 0 || col >= N_COL ||
 		back_buf[row][col] != ' ') {
