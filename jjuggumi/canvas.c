@@ -77,5 +77,9 @@ void print_status(void) {
 }
 
 void dialog(char message[]) {
-
+	for (int i = DIALOG_DURATION_SEC; i >= 0; i--) {
+		if (i == 0) break;
+		printf("\r%d%s", i,message);
+		Sleep(1000);
+	}
 }
