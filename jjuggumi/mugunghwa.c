@@ -21,9 +21,12 @@ void mugunghwa_init(void) {
 		px[i] = N_COL - 2;
 		py[i] = 2+i;
 
-		period[i] = randint(200, 500);
+		period[i] = randint(10, 100); //원래 200 500
 
 		back_buf[py[i]][px[i]] = '0' + i;
+	}
+	for (int i = 3; i <= 5; i++){	//영희
+		back_buf[i][1] = '#';
 	}
 	tick = 10;
 }
@@ -58,7 +61,10 @@ void move_manual(key_t key) {
 void move_random(int player) {
 	int p = player;
 	int nx, ny;
-	
+	//영희 근처 통과
+	if (back_buf[py[p]+1][px[p]] == '#' || back_buf[py[p]][px[p]-1] == '#'|| back_buf[py[p]-1][px[p]] == '#') {
+		return;
+	}
 
 	do {
 		int rnd_num = randint(1, 1000);
@@ -78,9 +84,15 @@ void move_random(int player) {
 			nx = px[p];
 			ny = py[p];
 		}
+		for (int i = 0; i < n_player; i++) {	//영희 밑에 플레이어 2명 있을 경우 무한placable 버그 해결
+			if (back_buf[ny][nx] == '0' + i) {
+				return;
+			}
+		}
 	} while (!placable(nx, ny));
 
 	move_tail(p, nx, ny);
+	
 }
 
 void move_tail(int player, int nx, int ny) {
