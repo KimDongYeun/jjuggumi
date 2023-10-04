@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <Windows.h>
+#include <string.h>
+#include <time.h>
 #include "jjuggumi.h"
 #include "canvas.h"
 
@@ -54,7 +56,7 @@ bool placable(int col, int row) {
 // 상단에 맵을, 하단에는 현재 상태를 출력
 void display(void) {
 	draw();
-	gotoxy(0,N_ROW + 4);  // 추가로 표시할 정보가 있으면 맵과 상태창 사이의 빈 공간에 출력
+	gotoxy(0, N_ROW + 4);  // 추가로 표시할 정보가 있으면 맵과 상태창 사이의 빈 공간에 출력
 	print_status();
 }
 
@@ -72,14 +74,86 @@ void draw(void) {
 void print_status(void) {
 	printf("no. of players left: %d\n", n_alive);
 	for (int p = 0; p < n_player; p++) {
-		printf("player %2d: %5s\n", p, player[p] ? "alive" : "DEAD");		
+		printf("player %2d: %5s\n", p, player[p] ? "alive" : "DEAD");
 	}
 }
 
+//dialog 구현 
+char backup[ROW_MAX][COL_MAX];
+
 void dialog(char message[]) {
-	for (int i = DIALOG_DURATION_SEC; i >= 0; i--) {
-		if (i == 0) break;
-		printf("\r%d%s", i,message);
-		Sleep(1000);
+	for (int i = 0; i < ROW_MAX; i++) {
+		for (int j = 0; j < COL_MAX; j++) {
+			backup[i][j] = back_buf[i][j];
+		}
+	} //전 화면 복사해놓기
+
+	int message_long = strlen(message); //메시지 길이 출력
+	int center = N_COL / 2 - message_long / 2; //메시지 내용 가로 중앙 출력
+	int message_row = N_ROW / 2;
+	int message_col = center;
+	//메시지 출력할 곳
+
+	int time = DIALOG_DURATION_SEC;
+
+	while (time >= 0) {
+		if (time > 0) {
+			//메시지 칸 들어갈 곳에 있는 거 다 없애기
+			for (int i = N_COL / 10 - 1; i < N_COL - N_COL / 10 + 1; i++) {
+				printxy(' ', i, message_row - 1);
+			}
+			for (int i = message_col - 8; i < N_COL / 2 + 17; i++) {
+				printxy(' ', i, message_row);
+			}
+			for (int i = N_COL / 10 - 1; i < N_COL - N_COL / 10 + 1; i++) {
+				printxy(' ', i, message_row + 1);
+			}
+
+			//메시지 창 출력
+			gotoxy(N_COL / 10, message_row - 1);
+			for (int i = 0; i <= N_COL - N_COL / 4; i++) {
+				printf("*");
+			} //위쪽 * 출력
+
+			gotoxy(N_COL / 10, message_row);
+			for (int i = 0; i < 1; i++) {
+				printf("*");
+			} // 메시지 앞 * 출력
+
+			gotoxy(N_COL / 10 + 4, message_row); //남은 시간 출력
+			printf("%d", time);
+			gotoxy(message_col + 1, message_row); //메시지 출력
+			printf("%s", message);
+
+			gotoxy(N_COL - N_COL / 10 - 2, message_row); //dialog 뒤 * 출력
+			for (int i = 0; i < 1; i++) {
+				printf("*");
+			}
+
+			gotoxy(N_COL / 10, message_row + 1); //아래쪽 * 출력
+			for (int i = 0; i <= N_COL - N_COL / 4; i++) {
+				printf("*");
+			}
+
+			Sleep(1000); //1초 대기
+		}
+		else if (time == 0) { //남은 시간이 0일때 메시지창 없애기
+			for (int i = N_COL / 10 - 1; i < N_COL - N_COL / 10 + 1; i++) {
+				printxy(' ', i, message_row - 1);
+			}
+			for (int i = message_col - 8; i < N_COL / 2 + 17; i++) {
+				printxy(' ', i, message_row);
+			}
+			for (int i = N_COL / 10 - 1; i < N_COL - N_COL / 10 + 1; i++) {
+				printxy(' ', i, message_row + 1);
+			}
+		}
+		time--;
+	}
+	// 이전 화면을 복구
+	for (int i = 0; i < ROW_MAX; i++) {
+		for (int j = 0; j < COL_MAX; j++) {
+			back_buf[i][j] = backup[i][j];
+		}
 	}
 }
