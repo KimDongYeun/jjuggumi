@@ -12,20 +12,25 @@ void mugunghwa_init(void);
 void move_manual(key_t key);
 void move_random(int i);
 void move_tail(int i, int nx, int ny);
+void message(void);
 
 int px[PLAYER_MAX], py[PLAYER_MAX], period[PLAYER_MAX];
+
+char Younghee[31] = "무궁화꽃이피었습니다";
+
+int tick2 = 0;
 
 void mugunghwa_init(void) {
 	map_init(9, 35);
 	for (int i = 0; i < n_player; i++) {
 		px[i] = N_COL - 2;
-		py[i] = 2+i;
+		py[i] = 2 + i;
 
-		period[i] = randint(10, 100); //원래 200 500
+		period[i] = randint(200, 500); //원래 200 500
 
 		back_buf[py[i]][px[i]] = '0' + i;
 	}
-	for (int i = 3; i <= 5; i++){	//영희
+	for (int i = 3; i <= 5; i++) {	//영희
 		back_buf[i][1] = '#';
 	}
 	tick = 10;
@@ -62,7 +67,7 @@ void move_random(int player) {
 	int p = player;
 	int nx, ny;
 	//영희 근처 통과
-	if (back_buf[py[p]+1][px[p]] == '#' || back_buf[py[p]][px[p]-1] == '#'|| back_buf[py[p]-1][px[p]] == '#') {
+	if (back_buf[py[p] + 1][px[p]] == '#' || back_buf[py[p]][px[p] - 1] == '#' || back_buf[py[p] - 1][px[p]] == '#') {
 		return;
 	}
 
@@ -92,7 +97,6 @@ void move_random(int player) {
 	} while (!placable(nx, ny));
 
 	move_tail(p, nx, ny);
-	
 }
 
 void move_tail(int player, int nx, int ny) {
@@ -101,6 +105,45 @@ void move_tail(int player, int nx, int ny) {
 	back_buf[py[p]][px[p]] = ' ';
 	px[p] = nx;
 	py[p] = ny;
+}
+
+void message(void) {
+	gotoxy(0, N_ROW + 1);
+	//switch문으로 변경하기
+	switch (tick2) {
+	case 0: for (int i = 0; i <= 1; i += 2) {
+		printf("%c%c ", Younghee[i], Younghee[i + 1]);
+	} break;
+	case 500: for (int i = 0; i <= 3; i += 2) {
+		printf("%c%c ", Younghee[i], Younghee[i + 1]);
+	} break;
+	case 1100: for (int i = 0; i <= 5; i += 2) {
+		printf("%c%c ", Younghee[i], Younghee[i + 1]);
+	} break;
+	case 1800: for (int i = 0; i <= 7; i += 2) {
+		printf("%c%c ", Younghee[i], Younghee[i + 1]);
+	} break;
+	case 2800: for (int i = 0; i <= 9; i += 2) {
+		printf("%c%c ", Younghee[i], Younghee[i + 1]);
+	} break;
+	case 3400: for (int i = 0; i <= 11; i += 2) {
+		printf("%c%c ", Younghee[i], Younghee[i + 1]);
+	} break;
+	case 3800: for (int i = 0; i <= 13; i += 2) {
+		printf("%c%c ", Younghee[i], Younghee[i + 1]);
+	} break;
+	case 4100: for (int i = 0; i <= 15; i += 2) {
+		printf("%c%c ", Younghee[i], Younghee[i + 1]);
+	} break;
+	case 4300: for (int i = 0; i <= 17; i += 2) {
+		printf("%c%c ", Younghee[i], Younghee[i + 1]);
+	} break;
+	case 4400: for (int i = 0; i <= 19; i += 2) {
+		printf("%c%c ", Younghee[i], Younghee[i + 1]);
+	} break;
+	}
+
+	tick2 += 10;
 }
 
 void mugunghwa(void) {
@@ -115,17 +158,22 @@ void mugunghwa(void) {
 		else if (key != K_UNDEFINED) {
 			move_manual(key);
 		}
-		
+
 		// player 1 부터는 랜덤으로 움직임(8방향)
 		for (int i = 1; i < n_player; i++) {
 			if (tick % period[i] == 0) {
 				move_random(i);
 			}
 		}
-		
+
+		message();
+
+
 		display();
 		Sleep(10);
 		tick += 10;
+
 	}
+
 	display();
 }
