@@ -13,12 +13,14 @@ void move_manual(key_t key);
 void move_random(int i);
 void move_tail(int i, int nx, int ny);
 void message(void);
+void Younghee_turn(void);
 
 int px[PLAYER_MAX], py[PLAYER_MAX], period[PLAYER_MAX];
 
 char Younghee[31] = "무궁화꽃이피었습니다";
 
 int tick2 = 0;
+int tick3 = 0;
 
 void mugunghwa_init(void) {
 	map_init(9, 35);
@@ -26,9 +28,16 @@ void mugunghwa_init(void) {
 		px[i] = N_COL - 2;
 		py[i] = 2 + i;
 
-		period[i] = randint(200, 500); //원래 200 500
+		period[i] = randint(20, 50); //원래 200 500
 
 		back_buf[py[i]][px[i]] = '0' + i;
+	}
+	for (int i = 0; i < n_player; i++) {
+		for (int j = 0; j < n_player; j++) {
+			if (period[i] == period[j]) {
+				period[j] = randint(20, 50);
+			}
+		}
 	}
 	for (int i = 3; i <= 5; i++) {	//영희
 		back_buf[i][1] = '#';
@@ -68,6 +77,9 @@ void move_random(int player) {
 	int nx, ny;
 	//영희 근처 통과
 	if (back_buf[py[p] + 1][px[p]] == '#' || back_buf[py[p]][px[p] - 1] == '#' || back_buf[py[p] - 1][px[p]] == '#') {
+		return;
+	}
+	if (back_buf[py[p] + 1][px[p]] == '@' || back_buf[py[p]][px[p] - 1] == '@' || back_buf[py[p] - 1][px[p]] == '@') {
 		return;
 	}
 
@@ -111,39 +123,57 @@ void message(void) {
 	gotoxy(0, N_ROW + 1);
 	//switch문으로 변경하기
 	switch (tick2) {
-	case 0: for (int i = 0; i <= 1; i += 2) {
-		printf("%c%c ", Younghee[i], Younghee[i + 1]);
-	} break;
-	case 500: for (int i = 0; i <= 3; i += 2) {
-		printf("%c%c ", Younghee[i], Younghee[i + 1]);
-	} break;
-	case 1100: for (int i = 0; i <= 5; i += 2) {
-		printf("%c%c ", Younghee[i], Younghee[i + 1]);
-	} break;
-	case 1800: for (int i = 0; i <= 7; i += 2) {
-		printf("%c%c ", Younghee[i], Younghee[i + 1]);
-	} break;
-	case 2800: for (int i = 0; i <= 9; i += 2) {
-		printf("%c%c ", Younghee[i], Younghee[i + 1]);
-	} break;
-	case 3400: for (int i = 0; i <= 11; i += 2) {
-		printf("%c%c ", Younghee[i], Younghee[i + 1]);
-	} break;
-	case 3800: for (int i = 0; i <= 13; i += 2) {
-		printf("%c%c ", Younghee[i], Younghee[i + 1]);
-	} break;
-	case 4100: for (int i = 0; i <= 15; i += 2) {
-		printf("%c%c ", Younghee[i], Younghee[i + 1]);
-	} break;
-	case 4300: for (int i = 0; i <= 17; i += 2) {
-		printf("%c%c ", Younghee[i], Younghee[i + 1]);
-	} break;
-	case 4400: for (int i = 0; i <= 19; i += 2) {
-		printf("%c%c ", Younghee[i], Younghee[i + 1]);
-	} break;
+		case 0: for (int i = 0; i <= 1; i += 2) {
+			printf("%c%c ", Younghee[i], Younghee[i + 1]);
+		} break;
+		case 500: for (int i = 0; i <= 3; i += 2) {
+			printf("%c%c ", Younghee[i], Younghee[i + 1]);
+		} break;
+		case 1100: for (int i = 0; i <= 5; i += 2) {
+			printf("%c%c ", Younghee[i], Younghee[i + 1]);
+		} break;
+		case 1800: for (int i = 0; i <= 7; i += 2) {
+			printf("%c%c ", Younghee[i], Younghee[i + 1]);
+		} break;
+		case 2800: for (int i = 0; i <= 9; i += 2) {
+			printf("%c%c ", Younghee[i], Younghee[i + 1]);
+		} break;
+		case 3400: for (int i = 0; i <= 11; i += 2) {
+			printf("%c%c ", Younghee[i], Younghee[i + 1]);
+		} break;
+		case 3800: for (int i = 0; i <= 13; i += 2) {
+			printf("%c%c ", Younghee[i], Younghee[i + 1]);
+		} break;
+		case 4100: for (int i = 0; i <= 15; i += 2) {
+			printf("%c%c ", Younghee[i], Younghee[i + 1]);
+		} break;
+		case 4300: for (int i = 0; i <= 17; i += 2) {
+			printf("%c%c ", Younghee[i], Younghee[i + 1]);
+		} break;
+		case 4500: for (int i = 0; i <= 19; i += 2) {
+			printf("%c%c ", Younghee[i], Younghee[i + 1]);
+		} break;
 	}
 
 	tick2 += 10;
+}
+
+void Younghee_turn(void) {
+	
+	if (tick2 == 4510) {
+		for (int i = 3; i <= 5; i++) {	
+			back_buf[i][1] = '@';
+		}
+		
+		
+		tick3 = 0;
+	}
+	tick3 += 10;
+	if (tick3 == 3000) {
+		for (int i = 3; i <= 5; i++) {	
+			back_buf[i][1] = '#';
+		}
+	}
 }
 
 void mugunghwa(void) {
@@ -160,6 +190,7 @@ void mugunghwa(void) {
 		}
 
 		// player 1 부터는 랜덤으로 움직임(8방향)
+		/*if (//다로 끝났을때 초이면)*/
 		for (int i = 1; i < n_player; i++) {
 			if (tick % period[i] == 0) {
 				move_random(i);
@@ -167,6 +198,7 @@ void mugunghwa(void) {
 		}
 
 		message();
+		Younghee_turn();
 
 
 		display();
