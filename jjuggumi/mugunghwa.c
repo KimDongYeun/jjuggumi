@@ -24,6 +24,7 @@ int tick3 = 3100;
 int round_out = 0;
 int out_player[PLAYER_MAX] = { 0 };
 int out = 0;
+int flag[PLAYER_MAX] = { 0 };
 
 void mugunghwa_init(void) {
 	map_init(9, 35);
@@ -71,6 +72,10 @@ void move_manual(key_t key) {
 	}
 
 	move_tail(0, nx, ny);
+	if (back_buf[py[0] + 1][px[0]] == '#' || back_buf[py[0]][px[0] - 1] == '#' || back_buf[py[0] - 1][px[0]] == '#') {
+		back_buf[py[0]][px[0]] = ' ';
+		flag[0] = 1;
+	}
 }
 
 
@@ -78,13 +83,7 @@ void move_manual(key_t key) {
 void move_random(int player) {
 	int p = player;
 	int nx, ny;
-	//영희 근처 통과
-	if (back_buf[py[p] + 1][px[p]] == '#' || back_buf[py[p]][px[p] - 1] == '#' || back_buf[py[p] - 1][px[p]] == '#') {
-		return;
-	}
-	if (back_buf[py[p] + 1][px[p]] == '@' || back_buf[py[p]][px[p] - 1] == '@' || back_buf[py[p] - 1][px[p]] == '@') {
-		return;
-	}
+	
 
 	do {
 		int rnd_num = randint(1, 1000);
@@ -112,6 +111,11 @@ void move_random(int player) {
 	} while (!placable(nx, ny));
 
 	move_tail(p, nx, ny);
+	if (back_buf[py[p] + 1][px[p]] == '#' || back_buf[py[p]][px[p] - 1] == '#' || back_buf[py[p] - 1][px[p]] == '#') {
+		back_buf[py[p]][px[p]] = ' ';
+		flag[p] = 1;
+		//dead만 안뜨게 처리해줘야함, flag만들어서 메인함수에서 if조건문 2개에 하나 더 추가시켜서 flase 안뜨게 해주자
+	}
 }
 
 void move_tail(int player, int nx, int ny) {
@@ -179,12 +183,6 @@ void Younghee_turn(void) {
 				round_out++;
 			}
 		}
-		
-		if (round_out >= 0) {
-			char message = printf("player %d dead!", out_player[0]);
-			printf("%c", typeof(message));
-			
-		};
 			
 		/*case 1:dialog("player %d dead!", out_player[0]); break;
 		case 2:dialog("player %d, %d dead!",out_player[0], out_player[1]); break;
@@ -217,6 +215,11 @@ void mugunghwa(void) {
 			break;
 		}
 		else if (key != K_UNDEFINED) {
+			if (tick3 <= 3000 && flag[0] == 0) {
+				if (key == K_UP || key == K_DOWN || key == K_LEFT) {
+					player[0] = false;
+				}
+			}
 			move_manual(key);
 		}
 
@@ -224,17 +227,11 @@ void mugunghwa(void) {
 		if (tick3 <= 3000) {
 			int rnd_10 = randint(1, 1000);
 			for (int i = 1; i < n_player; i++) {
-				if (tick % period[i] == 0 && rnd_10 <= 100) {
+				if (tick % period[i] == 0 && rnd_10 <= 100 && flag[i]==0) {
 					move_random(i);
-					if (back_buf[py[i] + 1][px[i]] == '#' || back_buf[py[i]][px[i] - 1] == '#' || back_buf[py[i] - 1][px[i]] == '#' ||
-					back_buf[py[i] + 1][px[i]] == '@' || back_buf[py[i]][px[i] - 1] == '@' || back_buf[py[i] - 1][px[i]] == '@') {
-					break;
-					}
-					else {
-						player[i] = false;
-						out_player[out] = i;
-						out++;
-					}
+					player[i] = false;
+					out_player[out] = i;
+					out++;
 				}
 			}
 		}
