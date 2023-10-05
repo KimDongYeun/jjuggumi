@@ -19,6 +19,7 @@ char back_buf[ROW_MAX][COL_MAX];
 int N_ROW, N_COL;
 
 void map_init(int n_row, int n_col);
+void dialog_mugunghwa(char message[], char message2[], char out_player[], int size);
 void dialog(char message[]);
 bool placable(int row, int col);
 void display(void);

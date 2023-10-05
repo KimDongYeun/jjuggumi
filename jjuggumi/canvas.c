@@ -81,7 +81,7 @@ void print_status(void) {
 //dialog 구현 
 char backup[ROW_MAX][COL_MAX];
 
-void dialog(char message[]) {
+void dialog_mugunghwa(char message[],char message2[], char out_player[],int size) {
 	for (int i = 0; i < ROW_MAX; i++) {
 		for (int j = 0; j < COL_MAX; j++) {
 			backup[i][j] = back_buf[i][j];
@@ -119,6 +119,91 @@ void dialog(char message[]) {
 			for (int i = 0; i < 1; i++) {
 				printf("*");
 			} // 메시지 앞 * 출력
+
+			gotoxy(N_COL / 10 + 4, message_row); //남은 시간 출력
+			printf("%d ", time);
+			printf("%s ", message);
+			for (int i = 0; i < size-1; i++) { 
+				if (i%2==1) {
+					printf("%c ", out_player[i]);
+				}
+				else {
+					printf("%c", out_player[i]);
+				}
+			}
+			printf(" %s", message2);
+
+			gotoxy(N_COL - N_COL / 10 - 2, message_row); //dialog 뒤 * 출력
+			for (int i = 0; i < 1; i++) {
+				printf("*");
+			}
+
+			gotoxy(N_COL / 10, message_row + 1); //아래쪽 * 출력
+			for (int i = 0; i <= N_COL - N_COL / 4; i++) {
+				printf("*");
+			}
+
+			Sleep(1000); //1초 대기
+		}
+		else if (time == 0) { //남은 시간이 0일때 메시지창 없애기
+			for (int i = N_COL / 10 - 1; i < N_COL - N_COL / 10 + 1; i++) {
+				printxy(' ', i, message_row - 1);
+			}
+			for (int i = message_col - 8; i < N_COL / 2 + 17; i++) {
+				printxy(' ', i, message_row);
+			}
+			for (int i = N_COL / 10 - 1; i < N_COL - N_COL / 10 + 1; i++) {
+				printxy(' ', i, message_row + 1);
+			}
+		}
+		time--;
+	}
+	// 이전 화면을 복구
+	for (int i = 0; i < ROW_MAX; i++) {
+		for (int j = 0; j < COL_MAX; j++) {
+			back_buf[i][j] = backup[i][j];
+		}
+	}
+}
+
+void dialog(char message[]) {
+	for (int i = 0; i < ROW_MAX; i++) {
+		for (int j = 0; j < COL_MAX; j++) {
+			backup[i][j] = back_buf[i][j];
+		}
+	} //전 화면 복사해놓기
+
+	int message_long = strlen(message); //메시지 길이 출력
+	int center = N_COL / 2 - message_long / 2; //메시지 내용 가로 중앙 출력
+	int message_row = N_ROW / 2;
+	int message_col = center;
+	//메시지 출력할 곳
+
+	int time = DIALOG_DURATION_SEC;
+
+	while (time >= 0) {
+		if (time > 0) {
+			//메시지 칸 들어갈 곳에 있는 거 다 없애기
+			for (int i = N_COL / 10 - 1; i < N_COL - N_COL / 10 + 1; i++) {
+				printxy(' ', i, message_row - 1);
+			}
+			for (int i = message_col - 8; i < N_COL / 2 + 17; i++) {
+				printxy(' ', i, message_row);
+			}
+			for (int i = N_COL / 10 - 1; i < N_COL - N_COL / 10 + 1; i++) {
+				printxy(' ', i, message_row + 1);
+			}
+
+			//메시지 창 출력
+			gotoxy(N_COL / 10, message_row - 1);
+			for (int i = 0; i <= N_COL - N_COL / 4; i++) {
+				printf("*");
+			} //위쪽 * 출력
+
+			gotoxy(N_COL / 10, message_row);
+			for (int i = 0; i < 1; i++) {
+				printf("*");
+			} // 메시지 앞 *  출력
 
 			gotoxy(N_COL / 10 + 4, message_row); //남은 시간 출력
 			printf("%d", time);

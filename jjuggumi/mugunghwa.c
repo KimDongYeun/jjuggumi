@@ -18,11 +18,10 @@ void Younghee_turn(void);
 int px[PLAYER_MAX], py[PLAYER_MAX], period[PLAYER_MAX];
 
 char Younghee[31] = "무궁화꽃이피었습니다";
-
 int tick2 = 0;
 int tick3 = 3100;
 int round_out = 0;
-int out_player[PLAYER_MAX] = { 0 };
+char out_player[19] = {' '};
 int out = 0;
 int flag[PLAYER_MAX] = { 0 };
 
@@ -184,14 +183,8 @@ void Younghee_turn(void) {
 			}
 		}
 			
-		/*case 1:dialog("player %d dead!", out_player[0]); break;
-		case 2:dialog("player %d, %d dead!",out_player[0], out_player[1]); break;
-		case 3:dialog("player %d, %d, %d dead!", out_player[0], out_player[1],out_player[2]); break;
-		case 4:dialog("player %d, %d, %d, %d dead!", out_player[0], out_player[1], out_player[2],out_player[3]); break;
-		case 5:dialog("player %d, %d, %d, %d, %d dead!", out_player[0], out_player[1], out_player[2], out_player[3],out_player[4]); break;
-		}*/
-		n_alive = n_player - round_out;
-		out = 0;
+		dialog_mugunghwa("player", "dead!", out_player, out);
+		n_alive = n_player - round_out; //실시간으로 바뀌게 수정해줘야함
 		round_out = 0;
 		for (int i = 3; i <= 5; i++) {	
 			back_buf[i][1] = '#';
@@ -208,6 +201,10 @@ void mugunghwa(void) {
 
 	system("cls");
 	display();
+	//탈락자 다수일시 중간에 넣을 출력값
+	for (int i = 1; i < 19; i += 2) {
+		out_player[i] = ',';
+	}
 	while (1) {
 		// player 0만 손으로 움직임(4방향)
 		key_t key = get_key();
@@ -230,8 +227,9 @@ void mugunghwa(void) {
 				if (tick % period[i] == 0 && rnd_10 <= 100 && flag[i]==0) {
 					move_random(i);
 					player[i] = false;
-					out_player[out] = i;
-					out++;
+					flag[i] = 1;
+					out_player[out] = '0'+i;
+					out+=2;
 				}
 			}
 		}
@@ -243,10 +241,9 @@ void mugunghwa(void) {
 			}
 		
 		}
-
 		message();
 		Younghee_turn();
-
+		
 
 		display();
 		Sleep(10);
