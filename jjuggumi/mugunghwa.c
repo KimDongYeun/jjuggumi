@@ -15,7 +15,7 @@ void move_tail(int i, int nx, int ny);
 void message(void);
 void Younghee_turn(void);
 
-int px[PLAYER_MAX], py[PLAYER_MAX], period[PLAYER_MAX];
+
 
 char Younghee[31] = "무궁화꽃이피었습니다";
 int tick2 = 0;
