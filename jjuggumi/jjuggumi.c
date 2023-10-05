@@ -28,10 +28,11 @@ int jjuggumi_init(void) {
 	return 0;
 }
 
+
 int main(void) {
 	jjuggumi_init();
-	//sample();
 	mugunghwa();
+	sample();
 	//jebi();
 	return 0;
 }
