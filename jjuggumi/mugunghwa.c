@@ -20,7 +20,10 @@ int px[PLAYER_MAX], py[PLAYER_MAX], period[PLAYER_MAX];
 char Younghee[31] = "무궁화꽃이피었습니다";
 
 int tick2 = 0;
-int tick3 = 0;
+int tick3 = 3100;
+int round_out = 0;
+int out_player[PLAYER_MAX] = { 0 };
+int out = 0;
 
 void mugunghwa_init(void) {
 	map_init(9, 35);
@@ -121,38 +124,39 @@ void move_tail(int player, int nx, int ny) {
 
 void message(void) {
 	gotoxy(0, N_ROW + 1);
-	//switch문으로 변경하기
+	
 	switch (tick2) {
 		case 0: for (int i = 0; i <= 1; i += 2) {
 			printf("%c%c ", Younghee[i], Younghee[i + 1]);
 		} break;
-		case 500: for (int i = 0; i <= 3; i += 2) {
+		case 200: for (int i = 0; i <= 3; i += 2) {
 			printf("%c%c ", Younghee[i], Younghee[i + 1]);
 		} break;
-		case 1100: for (int i = 0; i <= 5; i += 2) {
+		case 500: for (int i = 0; i <= 5; i += 2) {
 			printf("%c%c ", Younghee[i], Younghee[i + 1]);
 		} break;
-		case 1800: for (int i = 0; i <= 7; i += 2) {
+		case 1000: for (int i = 0; i <= 7; i += 2) {
 			printf("%c%c ", Younghee[i], Younghee[i + 1]);
 		} break;
-		case 2800: for (int i = 0; i <= 9; i += 2) {
+		case 1600: for (int i = 0; i <= 9; i += 2) {
 			printf("%c%c ", Younghee[i], Younghee[i + 1]);
 		} break;
-		case 3400: for (int i = 0; i <= 11; i += 2) {
+		case 2100: for (int i = 0; i <= 11; i += 2) {
 			printf("%c%c ", Younghee[i], Younghee[i + 1]);
 		} break;
-		case 3800: for (int i = 0; i <= 13; i += 2) {
+		case 2400: for (int i = 0; i <= 13; i += 2) {
 			printf("%c%c ", Younghee[i], Younghee[i + 1]);
 		} break;
-		case 4100: for (int i = 0; i <= 15; i += 2) {
+		case 2600: for (int i = 0; i <= 15; i += 2) {
 			printf("%c%c ", Younghee[i], Younghee[i + 1]);
 		} break;
-		case 4300: for (int i = 0; i <= 17; i += 2) {
+		case 2700: for (int i = 0; i <= 17; i += 2) {
 			printf("%c%c ", Younghee[i], Younghee[i + 1]);
 		} break;
-		case 4500: for (int i = 0; i <= 19; i += 2) {
+		case 2750: for (int i = 0; i <= 19; i += 2) {
 			printf("%c%c ", Younghee[i], Younghee[i + 1]);
 		} break;
+		default: break;
 	}
 
 	tick2 += 10;
@@ -160,24 +164,51 @@ void message(void) {
 
 void Younghee_turn(void) {
 	
-	if (tick2 == 4510) {
+	if (tick2 == 2750) {
 		for (int i = 3; i <= 5; i++) {	
 			back_buf[i][1] = '@';
 		}
-		
 		
 		tick3 = 0;
 	}
 	tick3 += 10;
 	if (tick3 == 3000) {
+		for (int i = 0; i < n_player; i++) {
+			if (player[i] == false) {
+				back_buf[py[i]][px[i]] = ' ';
+				round_out++;
+			}
+		}
+		
+		if (round_out >= 0) {
+			char message = printf("player %d dead!", out_player[0]);
+			printf("%c", typeof(message));
+			
+		};
+			
+		/*case 1:dialog("player %d dead!", out_player[0]); break;
+		case 2:dialog("player %d, %d dead!",out_player[0], out_player[1]); break;
+		case 3:dialog("player %d, %d, %d dead!", out_player[0], out_player[1],out_player[2]); break;
+		case 4:dialog("player %d, %d, %d, %d dead!", out_player[0], out_player[1], out_player[2],out_player[3]); break;
+		case 5:dialog("player %d, %d, %d, %d, %d dead!", out_player[0], out_player[1], out_player[2], out_player[3],out_player[4]); break;
+		}*/
+		n_alive = n_player - round_out;
+		out = 0;
+		round_out = 0;
 		for (int i = 3; i <= 5; i++) {	
 			back_buf[i][1] = '#';
 		}
+		gotoxy(0, N_ROW + 1);
+		printf("                             ");
+		tick2 = 0;
+		tick3 = 3100;
 	}
 }
 
 void mugunghwa(void) {
 	mugunghwa_init();
+
+	system("cls");
 	display();
 	while (1) {
 		// player 0만 손으로 움직임(4방향)
@@ -190,11 +221,30 @@ void mugunghwa(void) {
 		}
 
 		// player 1 부터는 랜덤으로 움직임(8방향)
-		/*if (//다로 끝났을때 초이면)*/
-		for (int i = 1; i < n_player; i++) {
-			if (tick % period[i] == 0) {
-				move_random(i);
+		if (tick3 <= 3000) {
+			int rnd_10 = randint(1, 1000);
+			for (int i = 1; i < n_player; i++) {
+				if (tick % period[i] == 0 && rnd_10 <= 100) {
+					move_random(i);
+					if (back_buf[py[i] + 1][px[i]] == '#' || back_buf[py[i]][px[i] - 1] == '#' || back_buf[py[i] - 1][px[i]] == '#' ||
+					back_buf[py[i] + 1][px[i]] == '@' || back_buf[py[i]][px[i] - 1] == '@' || back_buf[py[i] - 1][px[i]] == '@') {
+					break;
+					}
+					else {
+						player[i] = false;
+						out_player[out] = i;
+						out++;
+					}
+				}
 			}
+		}
+		else {
+			for (int i = 1; i < n_player; i++) {
+				if (tick % period[i] == 0) {
+					move_random(i);
+				}
+			}
+		
 		}
 
 		message();
@@ -204,8 +254,5 @@ void mugunghwa(void) {
 		display();
 		Sleep(10);
 		tick += 10;
-
 	}
-
-	display();
 }
