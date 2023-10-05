@@ -149,7 +149,7 @@ void dialog_mugunghwa(char message[],char message2[], char out_player[],int size
 			for (int i = N_COL / 10 - 1; i < N_COL - N_COL / 10 + 1; i++) {
 				printxy(' ', i, message_row - 1);
 			}
-			for (int i = message_col - 8; i < N_COL / 2 + 17; i++) {
+			for (int i = N_COL / 10 - 1; i < N_COL - N_COL / 10 + 1; i++) {
 				printxy(' ', i, message_row);
 			}
 			for (int i = N_COL / 10 - 1; i < N_COL - N_COL / 10 + 1; i++) {
