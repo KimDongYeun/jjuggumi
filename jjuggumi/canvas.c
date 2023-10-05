@@ -10,7 +10,7 @@
 
 void draw(void);
 void print_status(void);
-
+void left_player(void);
 // (zero-base) row행, col열로 커서 이동
 void gotoxy(int col, int row) {
 	COORD pos = { col,row };
@@ -21,6 +21,14 @@ void gotoxy(int col, int row) {
 void printxy(char ch, int col, int row) {
 	gotoxy(col, row);
 	printf("%c", ch);
+}
+
+void left_player(void) {
+	for (int i = 0; i < n_player; i++) {
+		if (player[i] == false) {
+			back_buf[py[i]][px[i]] = ' ';
+		}
+	}
 }
 
 void map_init(int n_row, int n_col) {
