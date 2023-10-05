@@ -128,9 +128,16 @@ void dialog_mugunghwa(char message[],char message2[], char out_player[],int size
 				printf("*");
 			} // 메시지 앞 * 출력
 
+			gotoxy(N_COL - N_COL / 10 - 2, message_row); //dialog 뒤 * 출력
+			for (int i = 0; i < 1; i++) {
+				printf("*");
+			}
+
 			gotoxy(N_COL / 10 + 4, message_row); //남은 시간 출력
+
 			printf("%d ", time);
 			printf("%s ", message);
+
 			for (int i = 0; i < size-1; i++) { 
 				if (i%2==1) {
 					printf("%c ", out_player[i]);
@@ -140,11 +147,6 @@ void dialog_mugunghwa(char message[],char message2[], char out_player[],int size
 				}
 			}
 			printf(" %s", message2);
-
-			gotoxy(N_COL - N_COL / 10 - 2, message_row); //dialog 뒤 * 출력
-			for (int i = 0; i < 1; i++) {
-				printf("*");
-			}
 
 			gotoxy(N_COL / 10, message_row + 1); //아래쪽 * 출력
 			for (int i = 0; i <= N_COL - N_COL / 4; i++) {
@@ -157,11 +159,15 @@ void dialog_mugunghwa(char message[],char message2[], char out_player[],int size
 			for (int i = N_COL / 10 - 1; i < N_COL - N_COL / 10 + 1; i++) {
 				printxy(' ', i, message_row - 1);
 			}
-			for (int i = N_COL / 10 - 1; i < N_COL - N_COL / 10 + 1; i++) {
+			for (int i = N_COL / 10 - 1; i < N_COL+3; i++) {
 				printxy(' ', i, message_row);
 			}
 			for (int i = N_COL / 10 - 1; i < N_COL - N_COL / 10 + 1; i++) {
 				printxy(' ', i, message_row + 1);
+			}
+			gotoxy(N_COL-1, message_row); //5명이 탈락했을 때 맵보다 크게 출력되어 뒤 * 사라진거를 다시 뒤 * 출력
+			for (int i = 0; i < 1; i++) {
+				printf("*");
 			}
 		}
 		time--;

@@ -14,6 +14,9 @@ void move_random(int i);
 void move_tail(int i, int nx, int ny);
 void message(void);
 void Younghee_turn(void);
+void one_left();
+
+
 
 
 
@@ -26,6 +29,22 @@ int out = 0;
 int flag[PLAYER_MAX] = { 0 };
 int can_behind = 0;
 int behind = 0;
+int dead = 0;
+int one = 0;
+
+void one_left()
+{
+	for (int i = 0; i < n_player; i++) {
+		one += player[i];
+		if (one == 1) {
+			//ending();
+		}
+		else {
+			one = 0;
+		}
+
+	}
+}
 
 void mugunghwa_init(void) {
 	map_init(9, 35);
@@ -206,7 +225,7 @@ void Younghee_turn(void) {
 
 void mugunghwa(void) {
 	mugunghwa_init();
-
+	left_player();
 	system("cls");
 	display();
 	//탈락자 다수일시 중간에 넣을 출력값
@@ -220,26 +239,32 @@ void mugunghwa(void) {
 			break;
 		}
 		else if (key != K_UNDEFINED) {
-			if (tick3 <= 3000 && flag[0] == 0) {
+			if (tick3 <= 3000 && flag[0] == 0&&dead==0) {
 				for (int i = 1; i < px[0]; i++) {
 					for (int j = 0; j < n_player; j++) {
 						if (back_buf[py[0]][px[0] - i] == '0' + j) {
 							can_behind = 1;
 						}
 					}
-				}if(can_behind==1&&key==K_LEFT){
+				}
+				if(can_behind==1&&key==K_LEFT){
+					move_manual(key);
 					can_behind = 0;
 				}
 				else {
 					if (key == K_UP || key == K_DOWN || key == K_LEFT) {
+						move_manual(key);
 						player[0] = false;
 						out_player[out] = '0';
 						out += 2;
 						can_behind = 0;
+						dead = 1;
 					}
 				}
 			}
-			move_manual(key);
+			else {
+				move_manual(key);
+			}
 		}
 
 		// player 1 부터는 랜덤으로 움직임(8방향)
@@ -266,6 +291,7 @@ void mugunghwa(void) {
 						behind = 0;
 					}
 				}
+				one_left();
 			}
 		}
 		else {
@@ -278,9 +304,12 @@ void mugunghwa(void) {
 		}
 		message();
 		Younghee_turn();
-
+		one_left();
+		
 		display();
 		Sleep(10);
 		tick += 10;
 	}
 }
+
+
