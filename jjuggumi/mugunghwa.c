@@ -24,6 +24,8 @@ int round_out = 0;
 char out_player[19] = {' '};
 int out = 0;
 int flag[PLAYER_MAX] = { 0 };
+int can_behind = 0;
+int behind = 0;
 
 void mugunghwa_init(void) {
 	map_init(9, 35);
@@ -102,13 +104,11 @@ void move_random(int player) {
 			nx = px[p];
 			ny = py[p];
 		}
-		for (int i = 0; i < n_player; i++) {	//영희 밑에 플레이어 2명 있을 경우 무한placable 버그 해결
-			if (back_buf[ny][nx] == '0' + i) {
-				return;
-			}
-		}
 	} while (!placable(nx, ny));
-
+	if (can_behind == 1 && nx == px[p] - 1) {
+		behind = 1;
+		can_behind = 0;
+	}
 	move_tail(p, nx, ny);
 	if (back_buf[py[p] + 1][px[p]] == '#' || back_buf[py[p]][px[p] - 1] == '#' || back_buf[py[p] - 1][px[p]] == '#') {
 		back_buf[py[p]][px[p]] = ' ';
@@ -182,9 +182,17 @@ void Younghee_turn(void) {
 				round_out++;
 			}
 		}
-			
-		dialog_mugunghwa("player", "dead!", out_player, out);
-		n_alive = n_player - round_out; //실시간으로 바뀌게 수정해줘야함
+		if (out > 0) {
+			dialog_mugunghwa("player", "dead!", out_player, out);
+		}
+		else {
+
+		}
+		for (int i = 0; i < 19; i++) {
+			out_player[i] = ' ';
+		}
+		out = 0;
+		n_alive = n_player - round_out;
 		round_out = 0;
 		for (int i = 3; i <= 5; i++) {	
 			back_buf[i][1] = '#';
@@ -213,8 +221,22 @@ void mugunghwa(void) {
 		}
 		else if (key != K_UNDEFINED) {
 			if (tick3 <= 3000 && flag[0] == 0) {
-				if (key == K_UP || key == K_DOWN || key == K_LEFT) {
-					player[0] = false;
+				for (int i = 1; i < px[0]; i++) {
+					for (int j = 0; j < n_player; j++) {
+						if (back_buf[py[0]][px[0] - i] == '0' + j) {
+							can_behind = 1;
+						}
+					}
+				}if(can_behind==1&&key==K_LEFT){
+					can_behind = 0;
+				}
+				else {
+					if (key == K_UP || key == K_DOWN || key == K_LEFT) {
+						player[0] = false;
+						out_player[out] = '0';
+						out += 2;
+						can_behind = 0;
+					}
 				}
 			}
 			move_manual(key);
@@ -225,11 +247,24 @@ void mugunghwa(void) {
 			int rnd_10 = randint(1, 1000);
 			for (int i = 1; i < n_player; i++) {
 				if (tick % period[i] == 0 && rnd_10 <= 100 && flag[i]==0) {
+					for (int j = 1; j < px[i]; j++) {
+						for (int k = 0; k < n_player; k++) {
+							if (back_buf[py[i]][px[i] - j] == '0'+k) {
+								can_behind = 1;
+							}
+						}
+					}
 					move_random(i);
-					player[i] = false;
-					flag[i] = 1;
-					out_player[out] = '0'+i;
-					out+=2;
+					if (behind == 1) {
+						behind = 0;
+					}
+					else {
+						player[i] = false;
+						flag[i] = 1;
+						out_player[out] = '0' + i;
+						out += 2;
+						behind = 0;
+					}
 				}
 			}
 		}
@@ -243,7 +278,6 @@ void mugunghwa(void) {
 		}
 		message();
 		Younghee_turn();
-		
 
 		display();
 		Sleep(10);
