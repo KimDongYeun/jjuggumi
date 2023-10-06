@@ -90,8 +90,8 @@ void print_status(void) {
 char backup[ROW_MAX][COL_MAX];
 
 void dialog_mugunghwa(char message[],char message2[], char out_player[],int size) {
-	for (int i = 0; i < ROW_MAX; i++) {
-		for (int j = 0; j < COL_MAX; j++) {
+	for (int i = 0; i < N_ROW; i++) {
+		for (int j = 0; j < N_COL; j++) {
 			backup[i][j] = back_buf[i][j];
 		}
 	} //전 화면 복사해놓기
@@ -110,7 +110,7 @@ void dialog_mugunghwa(char message[],char message2[], char out_player[],int size
 			for (int i = N_COL / 10 - 1; i < N_COL - N_COL / 10 + 1; i++) {
 				printxy(' ', i, message_row - 1);
 			}
-			for (int i = message_col - 8; i < N_COL / 2 + 17; i++) {
+			for (int i = N_COL / 10 - 1; i < N_COL - N_COL / 10 + 1; i++) {
 				printxy(' ', i, message_row);
 			}
 			for (int i = N_COL / 10 - 1; i < N_COL - N_COL / 10 + 1; i++) {
@@ -159,7 +159,7 @@ void dialog_mugunghwa(char message[],char message2[], char out_player[],int size
 			for (int i = N_COL / 10 - 1; i < N_COL - N_COL / 10 + 1; i++) {
 				printxy(' ', i, message_row - 1);
 			}
-			for (int i = N_COL / 10 - 1; i < N_COL+3; i++) {
+			for (int i = N_COL / 10 - 1; i < N_COL - N_COL / 10 + 1; i++) {
 				printxy(' ', i, message_row);
 			}
 			for (int i = N_COL / 10 - 1; i < N_COL - N_COL / 10 + 1; i++) {
@@ -173,16 +173,17 @@ void dialog_mugunghwa(char message[],char message2[], char out_player[],int size
 		time--;
 	}
 	// 이전 화면을 복구
-	for (int i = 0; i < ROW_MAX; i++) {
-		for (int j = 0; j < COL_MAX; j++) {
+	for (int i = 0; i < N_ROW; i++) {
+		for (int j = 0; j < N_COL; j++) {
 			back_buf[i][j] = backup[i][j];
+			printxy(back_buf[i][j], j, i);
 		}
 	}
 }
 
 void dialog(char message[]) {
-	for (int i = 0; i < ROW_MAX; i++) {
-		for (int j = 0; j < COL_MAX; j++) {
+	for (int i = 0; i < N_ROW; i++) {
+		for (int j = 0; j < N_COL; j++) {
 			backup[i][j] = back_buf[i][j];
 		}
 	} //전 화면 복사해놓기
@@ -201,7 +202,7 @@ void dialog(char message[]) {
 			for (int i = N_COL / 10 - 1; i < N_COL - N_COL / 10 + 1; i++) {
 				printxy(' ', i, message_row - 1);
 			}
-			for (int i = message_col - 8; i < N_COL / 2 + 17; i++) {
+			for (int i = N_COL / 10 - 1; i < N_COL - N_COL / 10 + 1; i++) {
 				printxy(' ', i, message_row);
 			}
 			for (int i = N_COL / 10 - 1; i < N_COL - N_COL / 10 + 1; i++) {
@@ -246,13 +247,15 @@ void dialog(char message[]) {
 			for (int i = N_COL / 10 - 1; i < N_COL - N_COL / 10 + 1; i++) {
 				printxy(' ', i, message_row + 1);
 			}
+			draw();
 		}
 		time--;
 	}
 	// 이전 화면을 복구
-	for (int i = 0; i < ROW_MAX; i++) {
-		for (int j = 0; j < COL_MAX; j++) {
+	for (int i = 0; i < N_ROW; i++) {
+		for (int j = 0; j < N_COL; j++) {
 			back_buf[i][j] = backup[i][j];
+			printxy(back_buf[i][j], j, i);
 		}
 	}
 }
