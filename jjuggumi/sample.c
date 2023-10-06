@@ -9,9 +9,9 @@
 #define DIR_RIGHT	0
 
 void sample_init(void);
-void move_manual(key_t key);
-void move_random(int i, int dir);
-void move_tail(int i, int nx, int ny);
+void move_manual1(key_t key);
+void move_random1(int i, int dir);
+void move_tail1(int i, int nx, int ny);
 
 int px[PLAYER_MAX], py[PLAYER_MAX], period[PLAYER_MAX];  // 각 플레이어 위치, 이동 주기
 
@@ -34,7 +34,7 @@ void sample_init(void) {
 	tick = 0;
 }
 
-void move_manual(key_t key) {
+void move_manual1(key_t key) {
 	// 각 방향으로 움직일 때 x, y값 delta
 	static int dx[4] = { 1, -1, 0, 0 };
 	static int dy[4] = { 0, 0, -1, 1 };
@@ -56,11 +56,11 @@ void move_manual(key_t key) {
 		return;
 	}
 
-	move_tail(0, nx, ny);
+	move_tail1(0, nx, ny);
 }
 
 // 0 <= dir < 4가 아니면 랜덤
-void move_random(int player, int dir) {
+void move_random1(int player, int dir) {
 	int p = player;  // 이름이 길어서...
 	int nx, ny;  // 움직여서 다음에 놓일 자리
 
@@ -71,11 +71,11 @@ void move_random(int player, int dir) {
 		ny = py[p] + randint(-1, 1);
 	} while (!placable(nx, ny));
 
-	move_tail(p, nx, ny);
+	move_tail1(p, nx, ny);
 }
 
 // back_buf[][]에 기록
-void move_tail(int player, int nx, int ny) {
+void move_tail1(int player, int nx, int ny) {
 	int p = player;  // 이름이 길어서...
 	back_buf[ny][nx] = back_buf[py[p]][px[p]];
 	back_buf[py[p]][px[p]] = ' ';
@@ -85,9 +85,12 @@ void move_tail(int player, int nx, int ny) {
 
 void sample(void) {
 	sample_init();
+	left_player();
 
 	system("cls");
+	
 	display();
+	
 	while (1) {
 		// player 0만 손으로 움직임(4방향)
 		key_t key = get_key();
@@ -95,13 +98,13 @@ void sample(void) {
 			break;
 		}
 		else if (key != K_UNDEFINED) {
-			move_manual(key);
+			move_manual1(key);
 		}
 
 		// player 1 부터는 랜덤으로 움직임(8방향)
 		for (int i = 1; i < n_player; i++) {
 			if (tick % period[i] == 0) {
-				move_random(i, -1);
+				move_random1(i, -1);
 			}
 		}
 
