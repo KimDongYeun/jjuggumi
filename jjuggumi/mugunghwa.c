@@ -3,6 +3,7 @@
 #include "keyin.h"
 #include <stdio.h>
 
+
 #define DIR_UP		2
 #define DIR_DOWN	3
 #define DIR_LEFT	1
@@ -14,7 +15,7 @@ void move_random(int i);
 void move_tail(int i, int nx, int ny);
 void message(void);
 void Younghee_turn(void);
-void one_left();
+void one_survive();
 
 
 
@@ -32,18 +33,20 @@ int behind = 0;
 int dead = 0;
 int one = 0;
 
-void one_left()
+void one_survive()
 {
 	for (int i = 0; i < n_player; i++) {
 		one += player[i];
+	}
 		if (one == 1) {
 			//ending();
+			display();
+			dialog_mugunghwa("player", "dead!", out_player, out);
+			exit(0);
 		}
 		else {
 			one = 0;
 		}
-
-	}
 }
 
 void mugunghwa_init(void) {
@@ -52,7 +55,7 @@ void mugunghwa_init(void) {
 		px[i] = N_COL - 2;
 		py[i] = 2 + i;
 
-		period[i] = randint(20, 50); //원래 200 500
+		period[i] = randint(10, 150);
 
 		back_buf[py[i]][px[i]] = '0' + i;
 	}
@@ -151,31 +154,31 @@ void message(void) {
 		case 0: for (int i = 0; i <= 1; i += 2) {
 			printf("%c%c ", Younghee[i], Younghee[i + 1]);
 		} break;
-		case 200: for (int i = 0; i <= 3; i += 2) {
+		case 400: for (int i = 0; i <= 3; i += 2) {
 			printf("%c%c ", Younghee[i], Younghee[i + 1]);
 		} break;
-		case 500: for (int i = 0; i <= 5; i += 2) {
+		case 1000: for (int i = 0; i <= 5; i += 2) {
 			printf("%c%c ", Younghee[i], Younghee[i + 1]);
 		} break;
-		case 1000: for (int i = 0; i <= 7; i += 2) {
+		case 1800: for (int i = 0; i <= 7; i += 2) {
 			printf("%c%c ", Younghee[i], Younghee[i + 1]);
 		} break;
-		case 1600: for (int i = 0; i <= 9; i += 2) {
+		case 2800: for (int i = 0; i <= 9; i += 2) {
 			printf("%c%c ", Younghee[i], Younghee[i + 1]);
 		} break;
-		case 2100: for (int i = 0; i <= 11; i += 2) {
+		case 3500: for (int i = 0; i <= 11; i += 2) {
 			printf("%c%c ", Younghee[i], Younghee[i + 1]);
 		} break;
-		case 2400: for (int i = 0; i <= 13; i += 2) {
+		case 4000: for (int i = 0; i <= 13; i += 2) {
 			printf("%c%c ", Younghee[i], Younghee[i + 1]);
 		} break;
-		case 2600: for (int i = 0; i <= 15; i += 2) {
+		case 4300: for (int i = 0; i <= 15; i += 2) {
 			printf("%c%c ", Younghee[i], Younghee[i + 1]);
 		} break;
-		case 2700: for (int i = 0; i <= 17; i += 2) {
+		case 4500: for (int i = 0; i <= 17; i += 2) {
 			printf("%c%c ", Younghee[i], Younghee[i + 1]);
 		} break;
-		case 2750: for (int i = 0; i <= 19; i += 2) {
+		case 4600: for (int i = 0; i <= 19; i += 2) {
 			printf("%c%c ", Younghee[i], Younghee[i + 1]);
 		} break;
 		default: break;
@@ -186,7 +189,7 @@ void message(void) {
 
 void Younghee_turn(void) {
 	
-	if (tick2 == 2750) {
+	if (tick2 == 1000) {
 		for (int i = 3; i <= 5; i++) {	
 			back_buf[i][1] = '@';
 		}
@@ -194,7 +197,7 @@ void Younghee_turn(void) {
 		tick3 = 0;
 	}
 	tick3 += 10;
-	if (tick3 == 3000) {
+	if (tick3 == 3000) {                            // dialog 끝나고 숫자없는지 확인해서 게임이 끝난건지 확인
 		for (int i = 0; i < n_player; i++) {
 			if (player[i] == false) {
 				back_buf[py[i]][px[i]] = ' ';
@@ -261,6 +264,7 @@ void mugunghwa(void) {
 						dead = 1;
 					}
 				}
+				one_survive();
 			}
 			else {
 				move_manual(key);
@@ -269,8 +273,9 @@ void mugunghwa(void) {
 
 		// player 1 부터는 랜덤으로 움직임(8방향)
 		if (tick3 <= 3000) {
-			int rnd_10 = randint(1, 1000);
+			
 			for (int i = 1; i < n_player; i++) {
+				int rnd_10 = randint(1, 1000);
 				if (tick % period[i] == 0 && rnd_10 <= 100 && flag[i]==0) {
 					for (int j = 1; j < px[i]; j++) {
 						for (int k = 0; k < n_player; k++) {
@@ -291,7 +296,7 @@ void mugunghwa(void) {
 						behind = 0;
 					}
 				}
-				one_left();
+				one_survive();
 			}
 		}
 		else {
@@ -304,8 +309,7 @@ void mugunghwa(void) {
 		}
 		message();
 		Younghee_turn();
-		one_left();
-		
+		one_survive();
 		display();
 		Sleep(10);
 		tick += 10;
