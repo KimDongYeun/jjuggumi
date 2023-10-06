@@ -23,7 +23,7 @@ void one_survive();
 
 char Younghee[31] = "무궁화꽃이피었습니다";
 int tick2 = 0;
-int tick3 = 3100;
+int tick3 = 2500;
 int round_out = 0;
 char out_player[19] = {' '};
 int out = 0;
@@ -198,7 +198,7 @@ void Younghee_turn(void) {
 		tick3 = 0;
 	}
 	tick3 += 10;
-	if (tick3 == 3000) {                            // dialog 끝나고 숫자없는지 확인해서 게임이 끝난건지 확인
+	if (tick3 == 2400) {                            // dialog 끝나고 숫자없는지 확인해서 게임이 끝난건지 확인
 		for (int i = 0; i < n_player; i++) {
 			if (player[i] == false) {
 				back_buf[py[i]][px[i]] = ' ';
@@ -224,7 +224,7 @@ void Younghee_turn(void) {
 		gotoxy(0, N_ROW + 1);
 		printf("                             ");
 		tick2 = 0;
-		tick3 = 3100;
+		tick3 = 2500;
 	}
 }
 
@@ -261,7 +261,7 @@ void mugunghwa(void) {
 			break;
 		}
 		else if (key != K_UNDEFINED) {
-			if (tick3 <= 3000 && flag[0] == 0&&dead==0) {
+			if (tick3 <= 2400 && flag[0] == 0&&dead==0) {
 				for (int i = 1; i < px[0]; i++) {
 					for (int j = 0; j < n_player; j++) {
 						if (back_buf[py[0]][px[0] - i] == '0' + j) {
@@ -291,7 +291,7 @@ void mugunghwa(void) {
 		}
 
 		// player 1 부터는 랜덤으로 움직임(8방향)
-		if (tick3 <= 3000) {
+		if (tick3 <= 2400) {
 			
 			for (int i = 1; i < n_player; i++) {
 				int rnd_10 = randint(1, 1000);
