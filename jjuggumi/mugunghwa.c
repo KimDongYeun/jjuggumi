@@ -32,6 +32,7 @@ int can_behind = 0;
 int behind = 0;
 int dead = 0;
 int one = 0;
+int p_exist = 1;
 
 void one_survive()
 {
@@ -189,7 +190,7 @@ void message(void) {
 
 void Younghee_turn(void) {
 	
-	if (tick2 == 1000) {
+	if (tick2 == 4600) {
 		for (int i = 3; i <= 5; i++) {	
 			back_buf[i][1] = '@';
 		}
@@ -213,6 +214,7 @@ void Younghee_turn(void) {
 		for (int i = 0; i < 19; i++) {
 			out_player[i] = ' ';
 		}
+		
 		out = 0;
 		n_alive = n_player - round_out;
 		round_out = 0;
@@ -223,6 +225,23 @@ void Younghee_turn(void) {
 		printf("                             ");
 		tick2 = 0;
 		tick3 = 3100;
+	}
+}
+
+void gameend(void) {
+	p_exist = 0;
+	for (int i = 1; i < 7; i++) {
+		for (int j = 1; j < 34; j++) {
+			for (int k = 0; k < n_player; k++) {
+				if (back_buf[i][j] == '0' + k) {
+					p_exist = 1;
+				}
+			}
+		}
+	}
+	if (p_exist == 0) {
+		//다음게임으로넘어감
+		return;
 	}
 }
 
@@ -309,6 +328,10 @@ void mugunghwa(void) {
 		}
 		message();
 		Younghee_turn();
+		gameend();
+		if (p_exist == 0) {
+			break;
+		}
 		one_survive();
 		display();
 		Sleep(10);
