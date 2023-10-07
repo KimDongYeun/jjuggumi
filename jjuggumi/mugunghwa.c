@@ -56,7 +56,7 @@ void mugunghwa_init(void) {
 		px[i] = N_COL - 2;
 		py[i] = 2 + i;
 
-		period[i] = randint(10, 150);
+		period[i] = randint(20, 130);
 
 		back_buf[py[i]][px[i]] = '0' + i;
 	}
