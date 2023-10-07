@@ -15,7 +15,9 @@ void move_random(int i);
 void move_tail(int i, int nx, int ny);
 void message(void);
 void Younghee_turn(void);
-void one_survive();
+void if_behind(void);
+void one_survive(void);
+void move_0(int);
 
 
 
@@ -34,7 +36,7 @@ int dead = 0;
 int one = 0;
 int p_exist = 1;
 
-void one_survive()
+void one_survive(void)
 {
 	for (int i = 0; i < n_player; i++) {
 		one += player[i];
@@ -69,6 +71,9 @@ void mugunghwa_init(void) {
 	}
 	for (int i = 3; i <= 5; i++) {	//영희
 		back_buf[i][1] = '#';
+	}
+	for (int i = 1; i < 19; i += 2) { //탈락자 다수일시 중간에 넣을 출력값
+		out_player[i] = ',';
 	}
 	tick = 10;
 }
@@ -136,7 +141,6 @@ void move_random(int player) {
 	if (back_buf[py[p] + 1][px[p]] == '#' || back_buf[py[p]][px[p] - 1] == '#' || back_buf[py[p] - 1][px[p]] == '#') {
 		back_buf[py[p]][px[p]] = ' ';
 		flag[p] = 1;
-		//dead만 안뜨게 처리해줘야함, flag만들어서 메인함수에서 if조건문 2개에 하나 더 추가시켜서 flase 안뜨게 해주자
 	}
 }
 
@@ -230,8 +234,8 @@ void Younghee_turn(void) {
 
 void gameend(void) {
 	p_exist = 0;
-	for (int i = 1; i < 7; i++) {
-		for (int j = 1; j < 34; j++) {
+	for (int i = 1; i <= 7; i++) {
+		for (int j = 1; j <= 34; j++) {
 			for (int k = 0; k < n_player; k++) {
 				if (back_buf[i][j] == '0' + k) {
 					p_exist = 1;
@@ -245,15 +249,40 @@ void gameend(void) {
 	}
 }
 
+void if_behind(void)
+{
+	for (int i = 1; i < px[0]; i++) {
+		for (int j = 0; j < n_player; j++) {
+			if (back_buf[py[0]][px[0] - i] == '0' + j) {
+				can_behind = 1;
+			}
+		}
+	}
+}
+
+void move_0(int key) {
+	if (can_behind == 1 && key == K_LEFT) {
+		move_manual(key);
+		can_behind = 0;
+	}
+	else {
+		if (key == K_UP || key == K_DOWN || key == K_LEFT) {
+			move_manual(key);
+			player[0] = false;
+			out_player[out] = '0';
+			out += 2;
+			can_behind = 0;
+			dead = 1;
+			flag[0] = 1;
+		}
+	}
+}
+
 void mugunghwa(void) {
 	mugunghwa_init();
 	left_player();
 	system("cls");
 	display();
-	//탈락자 다수일시 중간에 넣을 출력값
-	for (int i = 1; i < 19; i += 2) {
-		out_player[i] = ',';
-	}
 	while (1) {
 		// player 0만 손으로 움직임(4방향)
 		key_t key = get_key();
@@ -262,27 +291,8 @@ void mugunghwa(void) {
 		}
 		else if (key != K_UNDEFINED) {
 			if (tick3 <= 2400 && flag[0] == 0&&dead==0) {
-				for (int i = 1; i < px[0]; i++) {
-					for (int j = 0; j < n_player; j++) {
-						if (back_buf[py[0]][px[0] - i] == '0' + j) {
-							can_behind = 1;
-						}
-					}
-				}
-				if(can_behind==1&&key==K_LEFT){
-					move_manual(key);
-					can_behind = 0;
-				}
-				else {
-					if (key == K_UP || key == K_DOWN || key == K_LEFT) {
-						move_manual(key);
-						player[0] = false;
-						out_player[out] = '0';
-						out += 2;
-						can_behind = 0;
-						dead = 1;
-					}
-				}
+				if_behind();
+				move_0(key);
 				one_survive();
 			}
 			else {
