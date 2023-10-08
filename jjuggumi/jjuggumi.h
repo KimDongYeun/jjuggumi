@@ -12,9 +12,8 @@ int tick;  // 시계
 int px[PLAYER_MAX], py[PLAYER_MAX], period[PLAYER_MAX];
 
 // 미니게임
-void sample(void);
-//void mugunghwa(void);
-//void mugunghwa(void);
+//void sample(void);
+void mugunghwa(void);
 //void nightgame(void);
 //void juldarigi(void);
 //void jebi(void);
