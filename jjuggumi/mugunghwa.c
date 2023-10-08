@@ -34,22 +34,22 @@ int flag[PLAYER_MAX] = { 0 };
 int can_behind = 0;
 int behind = 0;
 int dead = 0;
-int one = 0;
+int winner_num = 0;
 int p_exist = 1;
 
 void one_survive(void)
 {
 	for (int i = 0; i < n_player; i++) {
-		one += player[i];
+		winner_num += player[i];
 	}
-		if (one == 1) {
+		if (winner_num == 1) {
 			display();
 			dialog_mugunghwa("player", "dead!", out_player, out);
 			ending();
 			exit(0);
 		}
 		else {
-			one = 0;
+			winner_num = 0;
 		}
 }
 

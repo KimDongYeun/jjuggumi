@@ -12,7 +12,7 @@ void draw(void);
 void print_status(void);
 void left_player(void);
 void ascii_art_cong(void);
-//void ascii_art_over(void);
+void ascii_art_over(void);
 void ending(void);
 // (zero-base) row행, col열로 커서 이동
 void gotoxy(int col, int row) {
@@ -101,36 +101,37 @@ void ascii_art_cong() {
 
 }
 
-//void ascii_art_over() {
-//	printf(" _____                              \n");
-//	printf("|  __ \\                             \n");
-//	printf("| |  \\/  __ _  _ __ ___    ___    ___  __   __  ___  _ __  \n");
-//	printf("| | __  / _` || '_ ` _ \\  / _ \\  / _ \\ \\ \\ / / / _ \\| '__| \n");
-//	printf("| |_\\ \\| (_| || | | | | ||  __/ | (_) | \\ V / |  __/| |    _  _  _ \n");
-//	printf(" \\____/ \\__,_||_| |_| |_| \\___|  \\___/   \\_/   \\___||_|   (_)(_)(_)\n");
-//
-//}
+void ascii_art_over() {
+	printf(" _____                              \n");
+	printf("|  __ \\                             \n");
+	printf("| |  \\/  __ _  _ __ ___    ___    ___  __   __  ___  _ __  \n");
+	printf("| | __  / _` || '_ ` _ \\  / _ \\  / _ \\ \\ \\ / / / _ \\| '__| \n");
+	printf("| |_\\ \\| (_| || | | | | ||  __/ | (_) | \\ V / |  __/| |    _  _  _ \n");
+	printf(" \\____/ \\__,_||_| |_| |_| \\___|  \\___/   \\_/   \\___||_|   (_)(_)(_)\n");
+
+}
 
 void ending(void) {
-	int winner = -1;
+	int winner = 0;
+	int winner_count = 0;
 	for (int i = 0; i < n_player; i++) {
+		winner_count += player[i];
 		if (player[i]) {
 			winner = i;
-			break;
 		}
 	}
 	system("cls");
 	printf("======================================================\n\n"); Sleep(100);
 	printf("             쭈꾸미 게임이 종료 되었습니다.\n\n"); Sleep(100);
 	printf("======================================================\n\n"); Sleep(100);
-	if (winner != -1) {
+	if (winner_count == 1) {
 		printf("우승자는 플레이어 %d 입니다!\n", winner); Sleep(1000);
 		ascii_art_cong();
 	}
-	/*else {
-		printf("모든 플레이어가 탈락하였습니다...\n"); Sleep(1000);
+	else {
+		printf("우승자를 가리지 못했습니다.\n"); Sleep(1000);
 		ascii_art_over();
-	}*/
+	}
 }
 
 //dialog 구현 
