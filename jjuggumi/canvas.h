@@ -26,5 +26,6 @@ void display(void);
 void gotoxy(int x, int y);
 void printxy(char ch, int col, int row);
 void left_player(void);
+void ending(void);
 
 #endif

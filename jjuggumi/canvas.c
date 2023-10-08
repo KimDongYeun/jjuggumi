@@ -11,6 +11,9 @@
 void draw(void);
 void print_status(void);
 void left_player(void);
+void ascii_art_cong(void);
+//void ascii_art_over(void);
+void ending(void);
 // (zero-base) row행, col열로 커서 이동
 void gotoxy(int col, int row) {
 	COORD pos = { col,row };
@@ -84,6 +87,50 @@ void print_status(void) {
 	for (int p = 0; p < n_player; p++) {
 		printf("player %2d: %5s\n", p, player[p] ? "alive" : "DEAD");
 	}
+}
+
+void ascii_art_cong() {
+	printf("                                         _           _         _    _                     _  _ \n");
+	printf("                                        | |         | |       | |  (_)                   | || |\n");
+	printf("  ___   ___   _ __    __ _  _ __   __ _ | |_  _   _ | |  __ _ | |_  _   ___   _ __   ___ | || |\n");
+	printf(" / __| / _ \\ | '_ \\  / _` || '__| / _` || __|| | | || | / _` || __|| | / _ \\ | '_ \\ / __|| || |\n");
+	printf("| (__ | (_) || | | || (_| || |   | (_| || |_ | |_| || || (_| || |_ | || (_) || | | |\\__ \\|_||_|\n");
+	printf(" \\___| \\___/ |_| |_| \\__, ||_|    \\__,_| \\__| \\__,_||_| \\__,_| \\__||_| \\___/ |_| |_||___/(_)(_)\n");
+	printf("                      __/ |                                                                    \n");
+	printf("                     |___/                                                                     \n");
+
+}
+
+//void ascii_art_over() {
+//	printf(" _____                              \n");
+//	printf("|  __ \\                             \n");
+//	printf("| |  \\/  __ _  _ __ ___    ___    ___  __   __  ___  _ __  \n");
+//	printf("| | __  / _` || '_ ` _ \\  / _ \\  / _ \\ \\ \\ / / / _ \\| '__| \n");
+//	printf("| |_\\ \\| (_| || | | | | ||  __/ | (_) | \\ V / |  __/| |    _  _  _ \n");
+//	printf(" \\____/ \\__,_||_| |_| |_| \\___|  \\___/   \\_/   \\___||_|   (_)(_)(_)\n");
+//
+//}
+
+void ending(void) {
+	int winner = -1;
+	for (int i = 0; i < n_player; i++) {
+		if (player[i]) {
+			winner = i;
+			break;
+		}
+	}
+	system("cls");
+	printf("======================================================\n\n"); Sleep(100);
+	printf("             쭈꾸미 게임이 종료 되었습니다.\n\n"); Sleep(100);
+	printf("======================================================\n\n"); Sleep(100);
+	if (winner != -1) {
+		printf("우승자는 플레이어 %d 입니다!\n", winner); Sleep(1000);
+		ascii_art_cong();
+	}
+	/*else {
+		printf("모든 플레이어가 탈락하였습니다...\n"); Sleep(1000);
+		ascii_art_over();
+	}*/
 }
 
 //dialog 구현 
