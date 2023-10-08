@@ -19,7 +19,7 @@ void if_behind(void);
 void one_survive(void);
 void move_0(int);
 void gameend(void);
-
+void move_other(void);
 
 
 
@@ -262,12 +262,12 @@ void if_behind(void)
 }
 
 void move_0(int key) {
-	if (can_behind == 1 && key == K_LEFT) {
+	if (can_behind == 1 && key == K_LEFT || can_behind == 1 && key == K_RIGHT) {
 		move_manual(key);
 		can_behind = 0;
 	}
 	else {
-		if (key == K_UP || key == K_DOWN || key == K_LEFT) {
+		if (key == K_UP || key == K_DOWN || key == K_LEFT || key == K_RIGHT) {
 			move_manual(key);
 			player[0] = false;
 			out_player[out] = '0';
@@ -276,6 +276,44 @@ void move_0(int key) {
 			dead = 1;
 			flag[0] = 1;
 		}
+	}
+}
+
+void move_other(void)
+{
+	if (tick3 <= 2400) {
+		for (int i = 1; i < n_player; i++) {
+			int rnd_10 = randint(1, 1000);
+			if (tick % period[i] == 0 && rnd_10 <= 100 && flag[i] == 0) {
+				for (int j = 1; j < px[i]; j++) {
+					for (int k = 0; k < n_player; k++) {
+						if (back_buf[py[i]][px[i] - j] == '0' + k) {
+							can_behind = 1;
+						}
+					}
+				}
+				move_random(i);
+				if (behind == 1) {
+					behind = 0;
+				}
+				else {
+					player[i] = false;
+					flag[i] = 1;
+					out_player[out] = '0' + i;
+					out += 2;
+					behind = 0;
+				}
+			}
+			one_survive();
+		}
+	}
+	else {
+		for (int i = 1; i < n_player; i++) {
+			if (tick % period[i] == 0) {
+				move_random(i);
+			}
+		}
+
 	}
 }
 
@@ -300,47 +338,13 @@ void mugunghwa(void) {
 				move_manual(key);
 			}
 		}
-
 		// player 1 부터는 랜덤으로 움직임(8방향)
-		if (tick3 <= 2400) {
-			for (int i = 1; i < n_player; i++) {
-				int rnd_10 = randint(1, 1000);
-				if (tick % period[i] == 0 && rnd_10 <= 100 && flag[i]==0) {
-					for (int j = 1; j < px[i]; j++) {
-						for (int k = 0; k < n_player; k++) {
-							if (back_buf[py[i]][px[i] - j] == '0'+k) {
-								can_behind = 1;
-							}
-						}
-					}
-					move_random(i);
-					if (behind == 1) {
-						behind = 0;
-					}
-					else {
-						player[i] = false;
-						flag[i] = 1;
-						out_player[out] = '0' + i;
-						out += 2;
-						behind = 0;
-					}
-				}
-				one_survive();
-			}
-		}
-		else {
-			for (int i = 1; i < n_player; i++) {
-				if (tick % period[i] == 0) {
-					move_random(i);
-				}
-			}
-		
-		}
+		move_other();
 		message();
 		Younghee_turn();
 		gameend();
 		if (p_exist == 0) {
-			break;	//다음게임으로 넘어가야하나 다음게임이 아직 없으므로 2명이 골인해도 한명만 골인한걸로 뜸
+			break;	//다음게임으로 넘어가야하나 다음게임이 아직 없으므로 2명이 골인해도 우승자 가리지 못함 출력
 		}
 		one_survive();
 		display();
