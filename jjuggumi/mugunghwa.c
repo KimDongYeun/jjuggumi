@@ -37,7 +37,7 @@ int dead = 0;
 int winner_num = 0;
 int p_exist = 1;
 
-void one_survive(void)
+void one_survive(void) // 한명 살아남은 경우
 {
 	for (int i = 0; i < n_player; i++) {
 		winner_num += player[i];
@@ -203,7 +203,7 @@ void Younghee_turn(void) {
 		tick3 = 0;
 	}
 	tick3 += 10;
-	if (tick3 == 2400) {                            // dialog 끝나고 숫자없는지 확인해서 게임이 끝난건지 확인
+	if (tick3 == 2400) {                            
 		for (int i = 0; i < n_player; i++) {
 			if (player[i] == false) {
 				back_buf[py[i]][px[i]] = ' ';
