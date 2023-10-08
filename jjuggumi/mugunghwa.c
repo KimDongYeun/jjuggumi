@@ -59,7 +59,7 @@ void mugunghwa_init(void) {
 		px[i] = N_COL - 2;
 		py[i] = 2 + i;
 
-		period[i] = randint(20, 130);
+		period[i] = randint(20, 50);
 
 		back_buf[py[i]][px[i]] = '0' + i;
 	}
@@ -303,7 +303,6 @@ void mugunghwa(void) {
 
 		// player 1 부터는 랜덤으로 움직임(8방향)
 		if (tick3 <= 2400) {
-			
 			for (int i = 1; i < n_player; i++) {
 				int rnd_10 = randint(1, 1000);
 				if (tick % period[i] == 0 && rnd_10 <= 100 && flag[i]==0) {
