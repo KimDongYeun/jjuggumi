@@ -18,6 +18,7 @@ void Younghee_turn(void);
 void if_behind(void);
 void one_survive(void);
 void move_0(int);
+void gameend(void);
 
 
 
@@ -42,9 +43,9 @@ void one_survive(void)
 		one += player[i];
 	}
 		if (one == 1) {
-			//ending();
 			display();
 			dialog_mugunghwa("player", "dead!", out_player, out);
+			ending();
 			exit(0);
 		}
 		else {
@@ -340,7 +341,7 @@ void mugunghwa(void) {
 		Younghee_turn();
 		gameend();
 		if (p_exist == 0) {
-			break;
+			break;	//다음게임으로 넘어가야하나 다음게임이 아직 없으므로 2명이 골인해도 한명만 골인한걸로 뜸
 		}
 		one_survive();
 		display();
