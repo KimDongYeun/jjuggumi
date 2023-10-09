@@ -113,6 +113,7 @@ void ascii_art_over() {
 
 void ending(void) {
 	int winner = 0;
+	int left_player = 0;
 	int winner_count = 0;
 	for (int i = 0; i < n_player; i++) {
 		winner_count += player[i];
@@ -129,6 +130,12 @@ void ending(void) {
 		ascii_art_cong();
 	}
 	else {
+		for (int i = 0; i < n_player; i++) {
+			if (player[i]) {
+				printf("player%d ", i);
+			}
+		}
+		printf("SURVIVE!\n");
 		printf("우승자를 가리지 못했습니다.\n"); Sleep(1000);
 		ascii_art_over();
 	}
