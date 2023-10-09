@@ -59,14 +59,14 @@ void mugunghwa_init(void) {
 		px[i] = N_COL - 2;
 		py[i] = 2 + i;
 
-		period[i] = randint(20, 50);
+		period[i] = randint(20, 40);
 
 		back_buf[py[i]][px[i]] = '0' + i;
 	}
 	for (int i = 0; i < n_player; i++) {
 		for (int j = 0; j < n_player; j++) {
 			if (period[i] == period[j]) {
-				period[j] = randint(20, 50);
+				period[j] = randint(20, 40);
 			}
 		}
 	}
