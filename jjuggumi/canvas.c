@@ -151,10 +151,7 @@ void dialog_mugunghwa(char message[],char message2[], char out_player[],int size
 		}
 	} //전 화면 복사해놓기
 
-	int message_long = strlen(message)+ strlen(message2); //메시지 길이 출력
-	int center = N_COL / 2 - message_long / 2; //메시지 내용 가로 중앙 출력
 	int message_row = N_ROW / 2;
-	int message_col = center;
 	//메시지 출력할 곳
 
 	int time = DIALOG_DURATION_SEC;
@@ -234,10 +231,7 @@ void dialog(char message[]) {
 		}
 	} //전 화면 복사해놓기
 
-	int message_long = strlen(message); //메시지 길이 출력
-	int center = N_COL / 2 - message_long / 2; //메시지 내용 가로 중앙 출력
 	int message_row = N_ROW / 2;
-	int message_col = center;
 	//메시지 출력할 곳
 
 	int time = DIALOG_DURATION_SEC;
@@ -268,7 +262,6 @@ void dialog(char message[]) {
 
 			gotoxy(N_COL / 10 + 4, message_row); //남은 시간 출력
 			printf("%d", time);
-			gotoxy(message_col + 1, message_row); //메시지 출력
 			printf("%s", message);
 
 			gotoxy(N_COL - N_COL / 10 - 2, message_row); //dialog 뒤 * 출력

@@ -39,6 +39,7 @@ int p_exist = 1;
 double endtime;
 double starttime;
 double turntime = -1;
+period[PLAYER_MAX] = {0,100,230,200,250,160,220,240,130,260};
 
 void one_survive(void) // 한명 살아남은 경우
 {
@@ -73,16 +74,7 @@ void mugunghwa_init(void) {
 			py[i] = 1 + i;
 		}
 
-		period[i] = randint(20, 40);
-
 		back_buf[py[i]][px[i]] = '0' + i;
-	}
-	for (int i = 0; i < n_player; i++) {
-		for (int j = 0; j < n_player; j++) {
-			if (period[i] == period[j]) {
-				period[j] = randint(20, 40);
-			}
-		}
 	}
 	for (int i = 4; i <= 6; i++) {	//영희
 		back_buf[i][1] = '#';
@@ -151,6 +143,9 @@ void move_random(int player) {
 	if (can_behind == 1 && nx == px[p] - 1) {
 		behind = 1;
 		can_behind = 0;
+	}
+	else {
+		behind = 0;
 	}
 	move_tail(p, nx, ny);
 	if (back_buf[py[p] + 1][px[p]] == '#' || back_buf[py[p]][px[p] - 1] == '#' || back_buf[py[p] - 1][px[p]] == '#') {
