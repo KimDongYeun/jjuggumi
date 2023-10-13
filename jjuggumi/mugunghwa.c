@@ -57,10 +57,10 @@ void one_survive(void) // 한명 살아남은 경우
 }
 
 void mugunghwa_init(void) {
-	map_init(9, 35);
+	map_init(11, 35);
 	for (int i = 0; i < n_player; i++) {
 		px[i] = N_COL - 2;
-		py[i] = 2 + i;
+		py[i] = 1 + i;
 
 		period[i] = randint(20, 40);
 
@@ -73,7 +73,7 @@ void mugunghwa_init(void) {
 			}
 		}
 	}
-	for (int i = 3; i <= 5; i++) {	//영희
+	for (int i = 4; i <= 6; i++) {	//영희
 		back_buf[i][1] = '#';
 	}
 	for (int i = 1; i < 19; i += 2) { //탈락자 다수일시 중간에 넣을 출력값
@@ -199,7 +199,7 @@ void message(void) {
 void Younghee_turn(void) {
 	
 	if (tick2 == 4600) {
-		for (int i = 3; i <= 5; i++) {	
+		for (int i = 4; i <= 6; i++) {	
 			back_buf[i][1] = '@';
 		}
 		
@@ -228,7 +228,7 @@ void Younghee_turn(void) {
 		out = 0;
 		n_alive = n_player - round_out;
 		round_out = 0;
-		for (int i = 3; i <= 5; i++) {	
+		for (int i = 4; i <= 6; i++) {	
 			back_buf[i][1] = '#';
 		}
 		gotoxy(0, N_ROW + 1);
