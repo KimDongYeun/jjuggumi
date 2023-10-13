@@ -38,7 +38,7 @@ int winner_num = 0;
 int p_exist = 1;
 double endtime;
 double starttime;
-double turntime = 1;
+double turntime = -1;
 
 void one_survive(void) // 한명 살아남은 경우
 {
@@ -245,7 +245,7 @@ void Younghee_turn(void) {
 		gotoxy(0, N_ROW + 1);
 		printf("                             ");
 		tick2 = 0;
-		turntime = 1;
+		turntime = -1;
 	}
 }
 

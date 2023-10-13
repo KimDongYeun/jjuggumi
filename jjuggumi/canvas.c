@@ -151,7 +151,7 @@ void dialog_mugunghwa(char message[],char message2[], char out_player[],int size
 		}
 	} //전 화면 복사해놓기
 
-	int message_long = strlen(message); //메시지 길이 출력
+	int message_long = strlen(message)+ strlen(message2); //메시지 길이 출력
 	int center = N_COL / 2 - message_long / 2; //메시지 내용 가로 중앙 출력
 	int message_row = N_ROW / 2;
 	int message_col = center;
@@ -162,33 +162,31 @@ void dialog_mugunghwa(char message[],char message2[], char out_player[],int size
 	while (time >= 0) {
 		if (time > 0) {
 			//메시지 칸 들어갈 곳에 있는 거 다 없애기
-			for (int i = N_COL / 10 - 1; i < N_COL - N_COL / 10 + 1; i++) {
-				printxy(' ', i, message_row - 1);
-			}
-			for (int i = N_COL / 10 - 1; i < N_COL - N_COL / 10 + 1; i++) {
-				printxy(' ', i, message_row);
-			}
-			for (int i = N_COL / 10 - 1; i < N_COL - N_COL / 10 + 1; i++) {
-				printxy(' ', i, message_row + 1);
+			for (int i = 1; i < 34; i++) {
+				for (int j = -2; j <= 2; j++) {
+					printxy(' ', i, message_row + j);
+				}
 			}
 
 			//메시지 창 출력
-			gotoxy(N_COL / 10, message_row - 1);
-			for (int i = 0; i <= N_COL - N_COL / 4; i++) {
+			gotoxy(1, message_row - 2);
+			for (int i = 0; i < 33; i++) {
 				printf("*");
 			} //위쪽 * 출력
-
-			gotoxy(N_COL / 10, message_row);
-			for (int i = 0; i < 1; i++) {
-				printf("*");
-			} // 메시지 앞 * 출력
-
-			gotoxy(N_COL - N_COL / 10 - 2, message_row); //dialog 뒤 * 출력
-			for (int i = 0; i < 1; i++) {
-				printf("*");
+			for (int j = -1; j <= 1; j++) {
+				gotoxy(1, message_row+j);
+				for (int i = 0; i < 1; i++) {
+					printf("*");
+				}
+			}// 메시지 앞 * 출력
+			for (int j = -1; j <= 1; j++) {
+				gotoxy(33, message_row+j); //dialog 뒤 * 출력
+				for (int i = 0; i < 1; i++) {
+					printf("*");
+				}
 			}
 
-			gotoxy(N_COL / 10 + 4, message_row); //남은 시간 출력
+			gotoxy(3, message_row); //남은 시간 출력
 
 			printf("%d ", time);
 			printf("%s ", message);
@@ -203,27 +201,20 @@ void dialog_mugunghwa(char message[],char message2[], char out_player[],int size
 			}
 			printf(" %s", message2);
 
-			gotoxy(N_COL / 10, message_row + 1); //아래쪽 * 출력
-			for (int i = 0; i <= N_COL - N_COL / 4; i++) {
+			gotoxy(1, message_row + 2); //아래쪽 * 출력
+			for (int i = 0; i < 33; i++) {
 				printf("*");
 			}
 
 			Sleep(1000); //1초 대기
 		}
 		else if (time == 0) { //남은 시간이 0일때 메시지창 없애기
-			for (int i = N_COL / 10 - 1; i < N_COL - N_COL / 10 + 1; i++) {
-				printxy(' ', i, message_row - 1);
+			for (int i = 1; i < 40; i++) {
+				for (int j = -2; j <= 2; j++) {
+					printxy(' ', i, message_row + j);
+				}
 			}
-			for (int i = N_COL / 10 - 1; i < N_COL - N_COL / 10 + 1; i++) {
-				printxy(' ', i, message_row);
-			}
-			for (int i = N_COL / 10 - 1; i < N_COL - N_COL / 10 + 1; i++) {
-				printxy(' ', i, message_row + 1);
-			}
-			gotoxy(N_COL-1, message_row); //5명이 탈락했을 때 맵보다 크게 출력되어 뒤 * 사라진거를 다시 뒤 * 출력
-			for (int i = 0; i < 1; i++) {
-				printf("*");
-			}
+			
 		}
 		time--;
 	}
