@@ -60,7 +60,18 @@ void mugunghwa_init(void) {
 	map_init(11, 35);
 	for (int i = 0; i < n_player; i++) {
 		px[i] = N_COL - 2;
-		py[i] = 1 + i;
+		if (n_player <= 3) {
+			py[i] = 4 + i;
+		}
+		else if (n_player <= 5) {
+			py[i] = 3 + i;
+		}
+		else if (n_player <= 7) {
+			py[i] = 2 + i;
+		}
+		else{
+			py[i] = 1 + i;
+		}
 
 		period[i] = randint(20, 40);
 
