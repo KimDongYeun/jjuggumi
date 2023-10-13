@@ -2,6 +2,7 @@
 #include "canvas.h"
 #include "keyin.h"
 #include <stdio.h>
+#include <time.h>
 
 
 #define DIR_UP		2
@@ -26,7 +27,6 @@ void move_other(void);
 
 char Younghee[31] = "무궁화꽃이피었습니다";
 int tick2 = 0;
-int tick3 = 2500;
 int round_out = 0;
 char out_player[19] = {' '};
 int out = 0;
@@ -36,6 +36,9 @@ int behind = 0;
 int dead = 0;
 int winner_num = 0;
 int p_exist = 1;
+double endtime;
+double starttime;
+double turntime = 1;
 
 void one_survive(void) // 한명 살아남은 경우
 {
@@ -200,10 +203,12 @@ void Younghee_turn(void) {
 			back_buf[i][1] = '@';
 		}
 		
-		tick3 = 0;
+		endtime = (unsigned)time(NULL);
+		endtime += 3;
 	}
-	tick3 += 10;
-	if (tick3 == 2400) {                            
+	starttime = (unsigned)time(NULL);
+	turntime = endtime - starttime;
+	if (turntime == 0) {                            
 		for (int i = 0; i < n_player; i++) {
 			if (player[i] == false) {
 				back_buf[py[i]][px[i]] = ' ';
@@ -229,7 +234,7 @@ void Younghee_turn(void) {
 		gotoxy(0, N_ROW + 1);
 		printf("                             ");
 		tick2 = 0;
-		tick3 = 2500;
+		turntime = 1;
 	}
 }
 
@@ -281,7 +286,7 @@ void move_0(int key) {
 
 void move_other(void)
 {
-	if (tick3 <= 2400) {
+	if (turntime>0) {
 		for (int i = 1; i < n_player; i++) {
 			int rnd_10 = randint(1, 1000);
 			if (tick % period[i] == 0 && rnd_10 <= 100 && flag[i] == 0) {
@@ -329,7 +334,7 @@ void mugunghwa(void) {
 			break;
 		}
 		else if (key != K_UNDEFINED) {
-			if (tick3 <= 2400 && flag[0] == 0&&dead==0) {
+			if (turntime>0 && flag[0] == 0&&dead==0) {
 				if_behind();
 				move_0(key);
 				one_survive();
