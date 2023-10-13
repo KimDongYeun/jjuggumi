@@ -340,7 +340,9 @@ void mugunghwa(void) {
 				one_survive();
 			}
 			else {
-				move_manual(key);
+				if (player[0] == true) {
+					move_manual(key);
+				}
 			}
 		}
 		// player 1 부터는 랜덤으로 움직임(8방향)
