@@ -119,25 +119,32 @@ void move_manual(key_t key) {
 void move_random(int player) {
 	int p = player;
 	int nx, ny;
-	
+	int a=0, b=0, c=0, d = 0;
 
 	do {
 		int rnd_num = randint(1, 1000);
 		if (rnd_num >= 1 && rnd_num <= 700) {
 			nx = px[p] - 1;
 			ny = py[p];
+			a++;
 		}
 		else if (rnd_num >= 701 && rnd_num <= 800) {
 			nx = px[p];
 			ny = py[p] - 1;
+			b++;
 		}
 		else if (rnd_num >= 801 && rnd_num <= 900) {
 			nx = px[p];
 			ny = py[p] + 1;
+			c++;
 		}
 		else {
 			nx = px[p];
 			ny = py[p];
+			d++;
+		}
+		if (a >= 2 && b >= 2 && c >= 2 && d >= 2) {
+			break;
 		}
 	} while (!placable(nx, ny));
 	if (can_behind == 1 && nx == px[p] - 1) {
