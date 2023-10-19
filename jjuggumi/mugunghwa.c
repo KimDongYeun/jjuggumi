@@ -246,7 +246,7 @@ void Younghee_turn(void) {
 
 void gameend(void) {
 	p_exist = 0;
-	for (int i = 1; i <= 7; i++) {
+	for (int i = 1; i <= 9; i++) {
 		for (int j = 1; j <= 34; j++) {
 			for (int k = 0; k < n_player; k++) {
 				if (back_buf[i][j] == '0' + k) {
